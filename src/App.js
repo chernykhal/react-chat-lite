@@ -1,13 +1,24 @@
-import io from "socket.io-client";
+import React from "react";
+import socket from "./socket";
+
+import reducer from "./reducer";
+import JoinBlock from "./components/JoinBlock";
 
 function App() {
-  const connectSocket = () => {
-    const socket = io("http://localhost:9999");
+  const [state, dispatch] = React.useReducer(reducer, {
+    joined: false,
+  });
+
+  const onLogin = () => {
+    dispatch({
+      type: "JOINED",
+      payload: true,
+    });
   };
 
   return (
-    <div className="App">
-      <button onClick={connectSocket}>Подключиться</button>
+    <div className="wrapper">
+      {!state.isAuth && <JoinBlock onLogin={onLogin} />}
     </div>
   );
 }

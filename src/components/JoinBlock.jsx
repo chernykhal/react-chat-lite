@@ -18,12 +18,13 @@ const JoinBlock = ({ onLogin }) => {
     if (!roomId || !userName) {
       return alert("Неверные данные!");
     }
-    setLoading(true);
-    await axios.post("/rooms", {
+    const obj = {
       roomId,
       userName,
-    });
-    onLogin();
+    };
+    setLoading(true);
+    await axios.post("/rooms", obj);
+    onLogin(obj);
   };
 
   return (

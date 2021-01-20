@@ -5,7 +5,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "client/build")));
 const rooms = new Map();
 
 app.get("/rooms/:id", function (req, res) {
@@ -60,8 +60,8 @@ io.on("connection", (socket) => {
 
   console.log("user connected", socket.id);
 });
-
-server.listen(9999, (error) => {
+const port = process.env.PORT || 5000;
+server.listen(port, (error) => {
   if (error) {
     throw Error(error);
   }

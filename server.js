@@ -1,13 +1,22 @@
 const express = require("express");
-const path = require("path");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "client/build")));
-const rooms = new Map();
 
+if (process.env.NODE_ENV === "production") {
+  // Exprees will serve up production assets
+  app.use(express.static("client/build"));
+
+  // Express serve up index.html file if it doesn't recognize route
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
+const rooms = new Map();
 app.get("/rooms/:id", function (req, res) {
   const { id: roomId } = req.params;
   const obj = rooms.has(roomId)
